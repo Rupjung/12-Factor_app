@@ -1,0 +1,24 @@
+services:
+  12-factor-app:
+    build:
+      context: .
+      dockerfile: Dockerfile  # This is your FastAPI Dockerfile
+    container_name: 12_factor_app
+    ports:
+      - "8000:8000"  # Expose FastAPI
+    volumes:
+      - .:/app       # Optional: mount code for live-reloading in dev
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  mkdocs:
+    image: squidfunk/mkdocs-material
+    container_name: mkdocs_app
+    volumes:
+      - ./docs:/docs
+    working_dir: /docs
+    command: serve --dev-addr=0.0.0.0:9090
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
